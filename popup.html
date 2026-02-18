@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        width: 320px;
+        padding: 22px;
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #0d0d0d;
+        color: #e6e6e6;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .header {
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 18px;
+        color: #00ffcc;
+        text-shadow: 0 0 8px #00ffcc;
+        margin: 0;
+        letter-spacing: 0.8px;
+      }
+
+      .upload-instructions {
+        color: #bfbfbf;
+        font-size: 13px;
+        margin-top: 6px;
+      }
+
+      .upload-section {
+        border: 2px dashed #00ffcc;
+        border-radius: 10px;
+        padding: 25px;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.25s ease;
+        background: rgba(0, 255, 204, 0.05);
+      }
+
+      .upload-section:hover {
+        background: rgba(0, 255, 204, 0.15);
+        box-shadow: 0 0 12px #00ffcc;
+      }
+
+      #fileInput {
+        display: none;
+      }
+
+      .file-name {
+        font-size: 14px;
+        color: #bfbfbf;
+        word-break: break-all;
+      }
+
+      #stats {
+        font-size: 14px;
+        color: #00ffcc;
+        text-align: center;
+        margin-top: -5px;
+      }
+
+      /* BUTTONS */
+      button {
+        padding: 12px 20px;
+        border-radius: 6px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: 0.25s ease;
+        letter-spacing: 0.5px;
+      }
+
+      #processBtn {
+        background: #00ffcc;
+        color: #000;
+        box-shadow: 0 0 12px #00ffcc;
+      }
+
+      #processBtn:hover {
+        background: #00e6b8;
+        box-shadow: 0 0 18px #00ffcc;
+      }
+
+      #processBtn:disabled {
+        background: #333;
+        color: #777;
+        box-shadow: none;
+        cursor: not-allowed;
+      }
+
+      #clearCacheBtn {
+        background: #ff0066;
+        color: #fff;
+        box-shadow: 0 0 12px #ff0066;
+      }
+
+      #clearCacheBtn:hover {
+        background: #e6005c;
+        box-shadow: 0 0 18px #ff0066;
+      }
+
+      /* STATUS MESSAGES */
+      .status-message {
+        font-size: 13px;
+        padding: 10px;
+        border-radius: 4px;
+        display: none;
+      }
+      .success {
+        background: rgba(0, 255, 153, 0.2);
+        color: #00ff99;
+        border: 1px solid #00cc88;
+      }
+      .error {
+        background: rgba(255, 0, 80, 0.2);
+        color: #ff3366;
+        border: 1px solid #ff0033;
+      }
+
+      /* SPINNER */
+      .processing-spinner {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #00ffcc;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Tuhin Subhra Sikdar GSC Bulk Removal Tool</h1>
+        <div class="upload-instructions">
+          Upload CSV file with URLs (one per line)
+        </div>
+      </div>
+
+      <label class="upload-section" id="dropZone">
+        <input type="file" id="fileInput" accept=".csv" />
+        <div style="font-size: 15px; color: #00ffcc;">Drag & Drop Your CSV</div>
+        <div style="font-size: 12px; margin-top: 5px; color: #bfbfbf;">
+          or click to browse
+        </div>
+      </label>
+
+      <div id="fileName" class="file-name"></div>
+      <div id="stats"></div>
+
+      <button id="processBtn" disabled>Process URLs</button>
+      <button id="clearCacheBtn">Clear Cache</button>
+
+      <div id="statusMessage" class="status-message"></div>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
