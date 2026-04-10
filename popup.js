@@ -48,17 +48,21 @@ function handleFile(file) {
 }
 
 processBtn.addEventListener("click", () => {
-  // Disable the Process URLs button so it stays disabled until another file is uploaded.
   processBtn.disabled = true;
   processBtn.innerHTML = '<div class="processing-spinner"></div> Processing...';
+
+  chrome.storage.local.set({ processing: true });
+
   chrome.storage.local.get("urls", ({ urls }) => {
     chrome.runtime.sendMessage({ action: "processUrls", urls }, (response) => {
-      if (response && response.success) {
-      } else {
+      if (!response || !response.success) {
         showStatus("Error processing URLs. Ensure you're on Google Search Console.", "error");
+
+        // Re-enable button if failed
+        processBtn.disabled = false;
+        processBtn.innerHTML = "Process URLs";
+        chrome.storage.local.set({ processing: false });
       }
-      // Restore the button text without re-enabling the button.
-      processBtn.innerHTML = "Process URLs";
     });
   });
 });
@@ -102,9 +106,18 @@ chrome.storage.onChanged.addListener((changes, area) => {
   }
 });
 
-chrome.storage.local.get(["urls", "totalUrls", "processedCount"], (data) => {
+chrome.storage.local.get(["urls", "totalUrls", "processedCount", "processing"], (data) => {
   if (data.urls && data.urls.length) {
     fileName.textContent = "Imported: " + data.urls.length + " URLs";
+
+    // Enable button if NOT currently processing
+    if (!data.processing) {
+      processBtn.disabled = false;
+    } else {
+      processBtn.disabled = true;
+      processBtn.innerHTML = "Processing...";
+    }
   }
+
   updateStatsDisplay(data.totalUrls || 0, data.processedCount || 0);
 });

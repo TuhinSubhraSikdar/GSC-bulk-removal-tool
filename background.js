@@ -39,11 +39,24 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 function getIntendedResourceId(urls) {
-  if (urls && urls.length > 0) {
-    const intendedDomain = new URL(urls[0]).origin;
-    return encodeURIComponent(intendedDomain);
+  if (!urls || urls.length === 0) return "";
+
+  try {
+    const urlObj = new URL(urls[0]);
+    const hostname = urlObj.hostname;
+
+    // Toggle this if needed
+    const useDomainProperty = true;
+
+    if (useDomainProperty) {
+      return encodeURIComponent(`sc-domain:${hostname}`);
+    } else {
+      return encodeURIComponent(urlObj.origin);
+    }
+  } catch (e) {
+    console.error("Invalid URL:", urls[0]);
+    return "";
   }
-  return "";
 }
 
 async function startProcessing() {
